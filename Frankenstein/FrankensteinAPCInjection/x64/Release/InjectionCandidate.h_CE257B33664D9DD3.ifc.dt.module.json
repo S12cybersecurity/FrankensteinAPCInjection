@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Release\\InjectionCandidate.obj",
+            "outputs": [
+                "x64\\Release\\InjectionCandidate.h_CE257B33664D9DD3.ifc.dt.module.json",
+                "x64\\Release\\InjectionCandidate.h_CE257B33664D9DD3.ifc.dt.d.json",
+                "x64\\Release\\InjectionCandidate.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Users\\s12de\\OneDrive\\Pictures\\Frankenstein\\ProcessInjectionWithOpenHandlesAndRWX\\InjectionCandidate.h",
+                    "source-path": "c:\\users\\s12de\\onedrive\\pictures\\frankenstein\\processinjectionwithopenhandlesandrwx\\injectioncandidate.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

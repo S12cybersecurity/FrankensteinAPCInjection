@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\InjectionCandidate.obj",
+            "outputs": [
+                "x64\\Debug\\InjectionCandidate.h_2F0E3A5361F87E4D.ifc.dt.module.json",
+                "x64\\Debug\\InjectionCandidate.h_2F0E3A5361F87E4D.ifc.dt.d.json",
+                "x64\\Debug\\InjectionCandidate.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Users\\s12de\\Documents\\Github\\malwaredeveloped\\ProcessInjectionWithOpenHandlesAndRWX\\ProcessInjectionWithOpenHandlesAndRWX\\InjectionCandidate.h",
+                    "source-path": "c:\\users\\s12de\\documents\\github\\malwaredeveloped\\processinjectionwithopenhandlesandrwx\\processinjectionwithopenhandlesandrwx\\injectioncandidate.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

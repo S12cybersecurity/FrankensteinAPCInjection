@@ -1,0 +1,58 @@
+﻿C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Microsoft\VC\v180\Microsoft.CppBuild.targets(548,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (ProcessInjectionWithOpenHandlesAndRWX.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Scanning sources for module dependencies...
+  InjectionCandidate.h
+  Compiling...
+  InjectionCandidate.h
+  Frankenstein.cpp
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(73,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(75,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(77,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(123,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(125,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(127,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(226,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(228,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(230,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(291,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(293,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(295,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(341,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(343,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\OneDrive\Pictures\Frankenstein\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(345,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+  RWXFinder.cpp
+  Shcd.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 540 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  ProcessInjectionWithOpenHandlesAndRWX.vcxproj -> C:\Users\s12de\OneDrive\Pictures\Frankenstein\x64\Release\FrankensteinAPC.exe

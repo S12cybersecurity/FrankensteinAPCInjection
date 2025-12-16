@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\RWXFinder.obj",
+            "outputs": [
+                "x64\\Debug\\RWXFinder.h_597BFFD106FBB888.ifc.dt.module.json",
+                "x64\\Debug\\RWXFinder.h_597BFFD106FBB888.ifc.dt.d.json",
+                "x64\\Debug\\RWXFinder.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Users\\s12de\\Documents\\Github\\malwaredeveloped\\ProcessInjectionWithOpenHandlesAndRWX\\ProcessInjectionWithOpenHandlesAndRWX\\RWXFinder.h",
+                    "source-path": "c:\\users\\s12de\\documents\\github\\malwaredeveloped\\processinjectionwithopenhandlesandrwx\\processinjectionwithopenhandlesandrwx\\rwxfinder.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

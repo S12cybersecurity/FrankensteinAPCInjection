@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Release\\InjectionCandidate.h.obj",
+            "outputs": [
+                "C:\\Users\\s12de\\OneDrive\\Pictures\\Frankenstein\\ProcessInjectionWithOpenHandlesAndRWX\\x64\\Release\\vc145.pdb",
+                "x64\\Release\\",
+                "C:\\Users\\s12de\\OneDrive\\Pictures\\Frankenstein\\ProcessInjectionWithOpenHandlesAndRWX\\x64\\Release\\InjectionCandidate.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "InjectionCandidate.h",
+                    "source-path": "c:\\users\\s12de\\onedrive\\pictures\\frankenstein\\processinjectionwithopenhandlesandrwx\\injectioncandidate.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

@@ -1,0 +1,48 @@
+﻿  Scanning sources for module dependencies...
+  ProcessInjectionWithOpenHandlesAndRWX.cpp
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(73,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(75,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(77,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(123,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(125,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(127,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(173,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(175,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(177,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(223,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(225,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(227,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(273,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(275,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\ProcessInjectionWithOpenHandlesAndRWX\MapFreeMemoryObjects.h(277,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'ProcessInjectionWithOpenHandlesAndRWX.cpp')
+  
+  ProcessInjectionWithOpenHandlesAndRWX.vcxproj -> C:\Users\s12de\Documents\Github\malwaredeveloped\ProcessInjectionWithOpenHandlesAndRWX\x64\Debug\ProcessInjectionWithOpenHandlesAndRWX.exe
