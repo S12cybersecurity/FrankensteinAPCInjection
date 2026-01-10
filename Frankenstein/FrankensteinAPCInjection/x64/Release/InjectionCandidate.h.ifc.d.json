@@ -1,7 +1,7 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "c:\\users\\s12de\\onedrive\\pictures\\frankenstein\\processinjectionwithopenhandlesandrwx\\injectioncandidate.h",
+        "Source": "c:\\users\\s12de\\documents\\github\\malwaredeveloped\\frankensteinapcinjection\\frankenstein\\frankensteinapcinjection\\injectioncandidate.h",
         "ProvidedModule": "",
         "Includes": [
             "c:\\program files (x86)\\windows kits\\10\\include\\10.0.26100.0\\um\\windows.h",

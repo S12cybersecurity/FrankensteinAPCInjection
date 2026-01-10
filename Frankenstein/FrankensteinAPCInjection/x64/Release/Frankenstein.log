@@ -1,0 +1,54 @@
+﻿C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Microsoft\VC\v180\Microsoft.CppBuild.targets(548,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (ProcessInjectionWithOpenHandlesAndRWX.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Scanning sources for module dependencies...
+  Frankenstein.cpp
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(73,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(75,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(77,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(123,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(125,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(127,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(226,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(228,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(230,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(291,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(293,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(295,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(341,18): warning C4101: 'status': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(343,15): warning C4101: 'objectNameInfo': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\FrankensteinAPCInjection\MapFreeMemoryObjects.h(345,24): warning C4101: 'objectName': unreferenced local variable
+  (compiling source file 'Frankenstein.cpp')
+  
+  Generating code
+  110 of 621 functions (17.7%) were compiled, the rest were copied from previous compilation.
+    74 functions were new in current compilation
+    77 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Frankenstein.vcxproj -> C:\Users\s12de\Documents\Github\malwaredeveloped\FrankensteinAPCInjection\Frankenstein\x64\Release\FrankensteinAPC.exe

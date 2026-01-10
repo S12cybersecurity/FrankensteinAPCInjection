@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="ProcessInjectionWithOpenHandlesAndRWX/ProcessInjectionWithOpenHandlesAndRWX.vcxproj" Id="94ad06e0-75f6-4f80-990d-26a81865805d" />
+  <Project Path="FrankensteinAPCInjection/Frankenstein.vcxproj" Id="9d0b4d79-bd4f-4482-8090-0cbeb10946cf" />
 </Solution>
