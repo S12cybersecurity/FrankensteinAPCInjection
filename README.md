@@ -16,7 +16,7 @@ This avoids many monitored APIs (VirtualAllocEx, VirtualProtectEx, CreateRemoteT
 
 ## Requirements
 - Windows (tested on Windows 10/11)
-- Shellcode compiled as x64 (shellcode is x64 Meterpreter reverse shell)
+- Shellcode compiled as x64 with non-null bytes (-b option in MSFVenom shellcode is x64 reverse shell)
 - Run with standard user privileges (no SeDebugPrivilege needed for many targets)
 
 ![c49a3827-7090-43bb-b798-b2dd274c7103(1)](https://github.com/user-attachments/assets/8d7d78bf-4ee4-41b2-8b5b-a44c032f8095)
