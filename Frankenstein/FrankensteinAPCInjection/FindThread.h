@@ -3,4 +3,5 @@
 
 HANDLE getFirstThreadHandleByPID(DWORD pid);
 bool EnableDebugPrivilege();
-HANDLE getNonMainOrAnyThreadHandleByPID(DWORD pid);
+//HANDLE getNonMainOrAnyThreadHandleByPID(DWORD pid);
+HANDLE FindBestApcThread(DWORD targetPid);

